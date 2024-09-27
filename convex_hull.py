@@ -25,7 +25,13 @@ def lower_common_tangent(left_points: list[tuple[float, float]], right_points: l
 
 def circle_traverse(points: list[tuple[float, float]], start: tuple[float, float], end: tuple[float, float]) -> list[tuple[float, float]]:
     """Return list of points circularly clockwise from the start to the end inclusive"""
-    pass
+    result = []
+    i = points.index(start)  # potential O(n) operation that could be optimized
+    while points[i] != end:
+        result.append(points[i])
+        i = (i + 1) % len(points)
+    result.append(end)
+    return result
 
 
 def merge_hulls(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]]) -> list[tuple[float, float]]:
