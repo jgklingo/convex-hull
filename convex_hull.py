@@ -13,12 +13,13 @@ def divide_points(points: list[tuple[float, float]]) -> list[list[tuple[float, f
     pass
 
 
-def upper_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]]) -> list[tuple[float, float]]:
+def upper_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> list[tuple[float, float]]:
     """Return the two points that make up the upper common tangent of the points in the form [left hull, right hull]"""
+    # Make sure that these functions don't cause merge_hulls to exceed O(n) time complexity
     pass
 
 
-def lower_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]]) -> list[tuple[float, float]]:
+def lower_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> list[tuple[float, float]]:
     """Return the two points that make up the lower common tangent of the points in the form [left hull, right hull]"""
     pass
 
@@ -34,10 +35,10 @@ def circle_traverse(points: list[tuple[float, float]], start: tuple[float, float
     return result
 
 
-def merge_hulls(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]]) -> list[tuple[float, float]]:
+def merge_hulls(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> list[tuple[float, float]]:
     """Return the merged convex hull of the two provided hulls"""
-    upper_ct = upper_common_tangent(left_points, right_points)
-    lower_ct = lower_common_tangent(left_points, right_points)
+    upper_ct = upper_common_tangent(left_points, right_points, rightmost_left, leftmost_right)
+    lower_ct = lower_common_tangent(left_points, right_points, rightmost_left, leftmost_right)
     return circle_traverse(left_points, lower_ct[0], upper_ct[0]) + circle_traverse(right_points, upper_ct[1], lower_ct[1])
 
 
@@ -47,6 +48,7 @@ def compute_hull(points: list[tuple[float, float]]) -> list[tuple[float, float]]
         return base_convex_hull(points)
     
     left_points, right_points = divide_points(points)
+    rightmost_left, leftmost_right = left_points[-1], right_points[0]
     left_hull = compute_hull(left_points)
     right_hull = compute_hull(right_points)
-    return merge_hulls(left_hull, right_hull)
+    return merge_hulls(left_hull, right_hull, rightmost_left, leftmost_right)
