@@ -13,25 +13,45 @@ def divide_points(points: list[tuple[float, float]]) -> list[list[tuple[float, f
     pass
 
 
-def upper_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> list[tuple[float, float]]:
-    """Return the two points that make up the upper common tangent of the points in the form [left hull, right hull]"""
+def find_slope(p1: tuple[float, float], p2: tuple[float, float]) -> float:
+    """Return the slope of the line between the two points"""
+    pass
+
+
+def upper_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> tuple[int, int]:
+    """Return the indices of the two points that make up the upper common tangent of the points in the form [left hull, right hull]"""
     # Make sure that these functions don't cause merge_hulls to exceed O(n) time complexity
+    i = left_points.index(rightmost_left)  # potential O(n) operations that could be optimized
+    j = right_points.index(leftmost_right)
+    shifted_right = True
+    shifted_left = True
+    while shifted_right or shifted_left:
+        shifted_right = False
+        while find_slope(left_points[(i - 1) % len(left_points), right_points[j]]) < find_slope(left_points[i], right_points[j]):
+            i = (i - 1) % len(left_points)
+            shifted_right = True
+        shifted_left = False
+        while find_slope(left_points[i], right_points[(j + 1) % len(right_points)]) > find_slope(left_points[i], right_points[j]):
+            j = (j + 1) % len(right_points)
+            shifted_left = True
+    return i, j
+
+
+def lower_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> tuple[int, int]:
+    """Return the indices of the two points that make up the lower common tangent of the points in the form [left hull, right hull]"""
+    i = left_points.index(rightmost_left)
+    j = right_points.index(leftmost_right)
     pass
 
 
-def lower_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> list[tuple[float, float]]:
-    """Return the two points that make up the lower common tangent of the points in the form [left hull, right hull]"""
-    pass
-
-
-def circle_traverse(points: list[tuple[float, float]], start: tuple[float, float], end: tuple[float, float]) -> list[tuple[float, float]]:
-    """Return list of points circularly clockwise from the start to the end inclusive"""
+def circle_traverse(points: list[tuple[float, float]], start: int, end: int) -> list[tuple[float, float]]:
+    """Return list of points circularly clockwise from the start to the end index inclusive"""
     result = []
-    i = points.index(start)  # potential O(n) operation that could be optimized
-    while points[i] != end:
+    i = start
+    while i != end:
         result.append(points[i])
         i = (i + 1) % len(points)
-    result.append(end)
+    result.append(points[end])
     return result
 
 
