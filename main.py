@@ -2,7 +2,7 @@ import argparse
 from time import time
 
 from generate import generate_random_points
-from convex_hull import compute_hull_helper
+from convex_hull import compute_hull
 from plotting import plot_points, draw_hull, title, show_plot
 
 
@@ -11,7 +11,7 @@ def main(n: int, distribution: str, seed: int | None):
     plot_points(points)
 
     start = time()
-    hull_points = compute_hull_helper(points)
+    hull_points = compute_hull(points)
     end = time()
 
     draw_hull(hull_points)
@@ -23,8 +23,8 @@ if __name__ == '__main__':
 
     # To debug or run in your IDE
     # you can uncomment the lines below and modify the arguments as needed
-    # import sys
-    # sys.argv = ['main.py', '-n', '10', '--seed', '312', '--debug']
+    import sys
+    sys.argv = ['main.py', '-n', '12', '--seed', '312']
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', type=int, help='The number of points to generate', default=10)
