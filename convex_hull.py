@@ -62,13 +62,19 @@ def merge_hulls(left_points: list[tuple[float, float]], right_points: list[tuple
     return circle_traverse(left_points, lower_ct[0], upper_ct[0]) + circle_traverse(right_points, upper_ct[1], lower_ct[1])
 
 
-def compute_hull(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
+def compute_hull_helper(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
     """Return the subset of provided points that define the convex hull"""
     if len(points) == 2 or len(points) == 3:
         return base_convex_hull(points)
     
     left_points, right_points = divide_points(points)
     rightmost_left, leftmost_right = left_points[-1], right_points[0]
-    left_hull = compute_hull(left_points)
-    right_hull = compute_hull(right_points)
+    left_hull = compute_hull_helper(left_points)
+    right_hull = compute_hull_helper(right_points)
     return merge_hulls(left_hull, right_hull, rightmost_left, leftmost_right)
+
+
+def compute_hull(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
+    """Return the subset of provided points that define the convex hull"""
+    points.sort()
+    return compute_hull_helper(points)

@@ -2,7 +2,7 @@ import argparse
 from time import time
 
 from generate import generate_random_points
-from convex_hull import compute_hull
+from convex_hull import compute_hull_helper
 from plotting import plot_points, draw_hull, title, show_plot
 
 
@@ -11,7 +11,7 @@ def main(n: int, distribution: str, seed: int | None):
     plot_points(points)
 
     start = time()
-    hull_points = compute_hull(points)
+    hull_points = compute_hull_helper(points)
     end = time()
 
     draw_hull(hull_points)
