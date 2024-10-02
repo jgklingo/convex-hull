@@ -2,31 +2,25 @@
 # you debug your algorithm
 # from plotting import draw_line, draw_hull, circle_point
 
+import math
+
 
 def base_convex_hull(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
     """Return the convex hull of a length 2 or 3 list of points in clockwise order"""
-    # AI, check this
-    if len(points) == 2:
-        return points
-    if points[0][0] == points[1][0] == points[2][0]:
-        return points
-    if points[0][1] == points[1][1] == points[2][1]:
-        return points
-    if points[0][0] == points[1][0]:
-        return [points[0], points[1], points[2]]
-    if points[0][0] == points[2][0]:
-        return [points[0], points[2], points[1]]
-    if points[1][0] == points[2][0]:
-        return [points[1], points[2], points[0]]
-    if points[0][1] == points[1][1]:
-        return [points[0], points[1], points[2]]
-    if points[0][1] == points[2][1]:
-        return [points[0], points[2], points[1]]
-    if points[1][1] == points[2][1]:
-        return [points[1], points[2], points[0]]
-    if points[0][0] < points[1][0] < points[2][0] or points[0][0] > points[1][0] > points[2][0]:
-        return [points[0], points[2], points[1]]
-    return points
+    # Step 1: Compute the centroid
+    center_x = sum(x for x, y in points) / len(points)
+    center_y = sum(y for x, y in points) / len(points)
+
+    # Step 2 & 3: Calculate and adjust angles
+    def angle_from_center(point):
+        x, y = point
+        angle = math.atan2(y - center_y, x - center_x)
+        # Normalize angle to range [0, 2π)
+        return (angle + 2 * math.pi) % (2 * math.pi)
+
+    # Step 4: Sort points in decreasing order of angle
+    sorted_points = sorted(points, key=angle_from_center, reverse=True)
+    return sorted_points
 
 
 def divide_points(points: list[tuple[float, float]]) -> list[list[tuple[float, float]]]:
@@ -66,12 +60,12 @@ def lower_common_tangent(left_points: list[tuple[float, float]], right_points: l
     shifted_left = True
     while shifted_right or shifted_left:
         shifted_right = False
-        while find_slope(left_points[(i - 1) % len(left_points)], right_points[j]) > find_slope(left_points[i], right_points[j]):
-            i = (i - 1) % len(left_points)
+        while find_slope(left_points[(i + 1) % len(left_points)], right_points[j]) > find_slope(left_points[i], right_points[j]):
+            i = (i + 1) % len(left_points)
             shifted_right = True
         shifted_left = False
-        while find_slope(left_points[i], right_points[(j + 1) % len(right_points)]) < find_slope(left_points[i], right_points[j]):
-            j = (j + 1) % len(right_points)
+        while find_slope(left_points[i], right_points[(j - 1) % len(right_points)]) < find_slope(left_points[i], right_points[j]):
+            j = (j - 1) % len(right_points)
             shifted_left = True
     return i, j
 
