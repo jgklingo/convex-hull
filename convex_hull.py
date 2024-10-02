@@ -83,8 +83,12 @@ def circle_traverse(points: list[tuple[float, float]], start: int, end: int) -> 
 
 def merge_hulls(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> list[tuple[float, float]]:
     """Return the merged convex hull of the two provided hulls"""
+    # draw_hull(left_points)
+    # draw_hull(right_points)
     upper_ct = upper_common_tangent(left_points, right_points, rightmost_left, leftmost_right)
     lower_ct = lower_common_tangent(left_points, right_points, rightmost_left, leftmost_right)
+    # draw_line(left_points[upper_ct[0]], right_points[upper_ct[1]])
+    # draw_line(left_points[lower_ct[0]], right_points[lower_ct[1]])
     return circle_traverse(left_points, lower_ct[0], upper_ct[0]) + circle_traverse(right_points, upper_ct[1], lower_ct[1])
 
 
