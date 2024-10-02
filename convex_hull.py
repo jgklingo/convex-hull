@@ -25,12 +25,15 @@ def base_convex_hull(points: list[tuple[float, float]]) -> list[tuple[float, flo
 
 def divide_points(points: list[tuple[float, float]]) -> list[list[tuple[float, float]]]:
     """Return the points divided vertically into two, returned as a list of length 2"""
-    return [points[:len(points) // 2], points[len(points) // 2:]]
+    midpoint = len(points) // 2
+    return [points[:midpoint], points[midpoint:]]
 
 
 def find_slope(p1: tuple[float, float], p2: tuple[float, float]) -> float:
     """Return the slope of the line between the two points"""
-    return (p2[1] - p1[1]) / (p2[0] - p1[0])
+    rise = p2[1] - p1[1]
+    run = p2[0] - p1[0]
+    return rise / run
 
 
 def upper_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> tuple[int, int]:
