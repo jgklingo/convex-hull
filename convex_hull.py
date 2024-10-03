@@ -4,20 +4,20 @@
 
 
 def divide_points(points: list[tuple[float, float]]) -> list[list[tuple[float, float]]]:
-    """Return the points divided vertically into two, returned as a list of length 2"""
+    """Return the points divided vertically into two, returned as a list of length 2. Time complexity: O(n)."""
     midpoint = len(points) // 2
     return [points[:midpoint], points[midpoint:]]
 
 
 def find_slope(p1: tuple[float, float], p2: tuple[float, float]) -> float:
-    """Return the slope of the line between the two points"""
+    """Return the slope of the line between the two points. Time complexity: O(n)."""
     rise = p2[1] - p1[1]
     run = p2[0] - p1[0]
     return rise / run
 
 
 def upper_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> tuple[int, int]:
-    """Return the indices of the two points that make up the upper common tangent of the points in the form [left hull, right hull]"""
+    """Return the indices of the two points that make up the upper common tangent of the points in the form [left hull, right hull]. Time complexity: O(n)."""
     # Make sure that these functions don't cause merge_hulls to exceed O(n) time complexity
     i = left_points.index(rightmost_left)  # potential O(n) operations that could be optimized
     j = right_points.index(leftmost_right)
@@ -36,7 +36,7 @@ def upper_common_tangent(left_points: list[tuple[float, float]], right_points: l
 
 
 def lower_common_tangent(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> tuple[int, int]:
-    """Return the indices of the two points that make up the lower common tangent of the points in the form [left hull, right hull]"""
+    """Return the indices of the two points that make up the lower common tangent of the points in the form [left hull, right hull]. Time complexity: O(n)."""
     i = left_points.index(rightmost_left)
     j = right_points.index(leftmost_right)
     shifted_right = True
@@ -54,7 +54,7 @@ def lower_common_tangent(left_points: list[tuple[float, float]], right_points: l
 
 
 def circle_traverse(points: list[tuple[float, float]], start: int, end: int) -> list[tuple[float, float]]:
-    """Return list of points circularly clockwise from the start to the end index inclusive"""
+    """Return list of points circularly clockwise from the start to the end index inclusive. Time complexity: O(n)."""
     result = []
     i = start
     while i != end:
@@ -65,7 +65,7 @@ def circle_traverse(points: list[tuple[float, float]], start: int, end: int) -> 
 
 
 def merge_hulls(left_points: list[tuple[float, float]], right_points: list[tuple[float, float]], rightmost_left: tuple[float, float], leftmost_right: tuple[float, float]) -> list[tuple[float, float]]:
-    """Return the merged convex hull of the two provided hulls"""
+    """Return the merged convex hull of the two provided hulls. Time complexity: O(n)."""
     # draw_hull(left_points)
     # draw_hull(right_points)
     upper_ct = upper_common_tangent(left_points, right_points, rightmost_left, leftmost_right)
@@ -76,7 +76,7 @@ def merge_hulls(left_points: list[tuple[float, float]], right_points: list[tuple
 
 
 def compute_hull_helper(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
-    """Return the subset of provided points that define the convex hull"""
+    """Return the subset of provided points that define the convex hull. Time complexity: O(nlog(n))."""
     if len(points) == 2 or len(points) == 1:
         return points
     
@@ -88,6 +88,6 @@ def compute_hull_helper(points: list[tuple[float, float]]) -> list[tuple[float, 
 
 
 def compute_hull(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
-    """Return the subset of provided points that define the convex hull"""
-    points.sort()
+    """Return the subset of provided points that define the convex hull. Time complexity: O(nlog(n))."""
+    points.sort()  # O(nlog(n))
     return compute_hull_helper(points)
